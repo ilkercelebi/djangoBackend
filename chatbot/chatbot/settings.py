@@ -42,8 +42,10 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "users",
     "responses",
+    "querys",
     'drf_yasg',
     "rest_framework_simplejwt",
+    'corsheaders',
 
     
 ]
@@ -56,8 +58,22 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200', 
+]
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+    'x-csrftoken',
+    'accept',
+    'origin',
+    'user-agent',
+]
+RECAPTCHA_SECRET_KEY = '6LfXepoqAAAAAPWEQFjO-py6exggfcPch9cBJjPF'
 ROOT_URLCONF = "chatbot.urls"
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
 TEMPLATES = [
@@ -117,6 +133,8 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Refresh token 7 gün boyunca geçerli
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+
 }
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

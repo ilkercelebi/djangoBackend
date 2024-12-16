@@ -8,17 +8,21 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
+import requests
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.conf import settings
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     authentication_classes = [JWTAuthentication]
-    permission_classes = [AllowAny]  # Herkese erişim izni tanımlı
+    permission_classes = [AllowAny]  
 
     @action(detail=False, methods=["get"])
     def list_users(self, request):
-        users = self.queryset.filter(is_active=True)  # Sadece aktif kullanıcıları listele
+        users = self.queryset.filter(is_active=True)  
         serializer = self.serializer_class(users, many=True)
         return Response(serializer.data)
 
@@ -43,11 +47,9 @@ class UserViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Kullanıcı doğrulama
         user = authenticate(username=username, password=password)
 
         if user and user.is_active:
-            # Kullanıcı giriş işlemlerini JWT ile gerçekleştir
             refresh = RefreshToken.for_user(user)
             return Response({
                 "refresh": str(refresh),
@@ -58,3 +60,28 @@ class UserViewSet(viewsets.ModelViewSet):
             {"error": "Kullanıcı adı veya şifre hatalı"},
             status=status.HTTP_401_UNAUTHORIZED
         )
+    @action(detail=False, methods=['post'], url_path='verify')
+    def verify_recaptcha(self, request):
+        # Frontend'den gelen token'ı alın
+        token = request.data.get('token')
+        if not token:
+            return Response({'error': 'Token is missing'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Google reCAPTCHA doğrulama endpointi
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        data = {
+            'secret': settings.RECAPTCHA_SECRET_KEY,  # Secret Key
+            'response': token,
+        }
+
+        # Google API'ye istek gönder
+        response = requests.post(url, data=data)
+        result = response.json()
+
+        # Yanıtı kontrol et
+        if result.get('success'):
+            return Response({'success': True, 'score': result.get('score', 0)}, status=status.HTTP_200_OK)
+        else:
+            return Response({'success': False, 'error': result.get('error-codes')}, status=status.HTTP_400_BAD_REQUEST)
+
+        

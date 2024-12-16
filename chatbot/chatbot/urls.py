@@ -22,12 +22,12 @@ schema_view = get_schema_view(
 )
 router = routers.DefaultRouter()
 router.register(r'upload', UserViewSet, basename="upload")
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),    
     path('api/', include('users.urls')),
     path('api/', include('responses.urls')),
+    path('api/',include('querys.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]

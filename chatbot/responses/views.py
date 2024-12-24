@@ -40,7 +40,8 @@ class ResponseViewSet(viewsets.ModelViewSet):
         response = Response.objects.create(
             user=request.user,
             query=query,
-            result=output_text
+            result=output_text,
+            query_id=query_id
         )
 
         return DRFResponse(

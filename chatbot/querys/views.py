@@ -28,6 +28,6 @@ class QueryViewSet(viewsets.ModelViewSet):
             )
         query = Query.objects.create(user=user,user_query=prompt)
         return DRFResponse(
-            {"message": "Prompt saved successfully.", "data": {"user_id": user.id, "prompt": prompt}},
+            {"message": "Prompt saved successfully.", "data": {"user_id": user.id, "prompt": prompt, "query_id": query.id}},
             status=status.HTTP_201_CREATED
         )

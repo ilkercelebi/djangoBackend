@@ -10,7 +10,7 @@ class ModelSingleton:
             cls._instance = super(ModelSingleton, cls).__new__(cls)
 
             base_model_path = "meta-llama/Llama-3.2-3B"
-            adapter_path = "/checkpoint-100000"
+            adapter_path = "C:\\Users\\furkan\\Desktop\\gitBackend\\djangoBackend\\chatbot\\responses\\checkpoint-100000"
 
             cls._instance.tokenizer = AutoTokenizer.from_pretrained(base_model_path)
             base_model = AutoModelForCausalLM.from_pretrained(base_model_path, torch_dtype=torch.float16)

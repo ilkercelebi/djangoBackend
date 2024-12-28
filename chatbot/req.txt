@@ -7,4 +7,4 @@ requests
 torch 
 transformers 
 peft
-huggingface_hub
+huggingface-hub

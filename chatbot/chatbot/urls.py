@@ -18,7 +18,7 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=[AllowAny],  # Burada tek bir sınıf bir liste içinde belirtilmeli
+    permission_classes=[AllowAny],
 )
 router = routers.DefaultRouter()
 router.register(r'upload', UserViewSet, basename="upload")

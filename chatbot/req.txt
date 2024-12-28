@@ -6,4 +6,5 @@ corsheaders
 requests 
 torch 
 transformers 
-peft 
+peft
+huggingface_hub

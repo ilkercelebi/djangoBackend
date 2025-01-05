@@ -30,8 +30,8 @@ def generate_response(input_text):
     with torch.no_grad():
         outputs = model.generate(
             inputs.input_ids,
-            max_length=256,
-            num_beams=5,
+            max_length=128,
+            num_beams=2,
             no_repeat_ngram_size=2,
             early_stopping=True,
         )
